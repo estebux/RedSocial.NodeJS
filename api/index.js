@@ -1,14 +1,21 @@
-// api/index.js
 const express = require('express');
-const user = require('./components/user/network'); // Ajusta la ruta si es necesario
+const bodyParser = require('body-parser');
+
+const swaggerUi = require('swagger-ui-express');
+
 const config = require('../config.js');
+const user = require('./components/user/network');
 
 const app = express();
 
-// ... otras configuraciones
+app.use(bodyParser.json());
 
-app.use('/api/user', user); // Ruta para las operaciones relacionadas con usuarios
+const swaggerDoc = require('./swagger.json');
+
+// ROUER
+app.use('/api/user', user);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.listen(config.api.port, () => {
-  console.log('Servidor escuchando en el puerto ', config.api.port);
+    console.log('Api escuchando en el puerto ', config.api.port);
 });
