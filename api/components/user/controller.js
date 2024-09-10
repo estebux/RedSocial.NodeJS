@@ -8,6 +8,11 @@ module.exports = function(injectedStore){
         store = require('../../../store/dummy');
     }
 
+    async function login(username, password){
+        const data = await store.query(tabla, {usrename: username});
+        return data;
+    }
+
     function list(){
         return store.list(tabla);
     }
@@ -42,6 +47,7 @@ module.exports = function(injectedStore){
         list,
         get,
         upsert,
+        login,
     }
 }
 
