@@ -20,17 +20,7 @@ module.exports = function(injectedStore){
                         throw new Error('Informacion invalida');
                     }
                 });
-
-        if(data.password === password){
-            //generar token
-            return auth.sign(data);
-        }
-        else
-        {
-            throw new Error('Informacion invalida');
-        }
-        return data;
-    }
+           }
 
 
     async function upsert(data){
