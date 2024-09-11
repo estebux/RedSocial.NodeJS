@@ -14,16 +14,20 @@ const check = {
     own: function(req, owner){
         const decoded = decodeHeader(req);
         console.log(decoded);
+
+        if(decoded.id !== owner){
+            throw error('No puedes hacer esto', 401);
+        }
     },    
 }
 
 function getToken(auth){
     if(!auth){
-        throw new Error('No viene token');
+        throw new Error('No viene token', 401);
     }
 
     if(auth.indexOf('Bearer ') === -1){
-        throw new Error('Formato invalido'); 
+        throw new Error('Formato invalido', 401); 
     }
 
     let token = auth.replace('Bearer ', '');
@@ -32,8 +36,8 @@ function getToken(auth){
 }
 
 function decodeHeader(req){
-    const autthorization = req.headers.autthorization || '';
-    const token = getToken(autthorization);
+    const authorization = req.headers.authorization || '';
+    const token = getToken(authorization);
     const decoded = verify(token);
 
     req.user = decoded;
@@ -43,4 +47,5 @@ function decodeHeader(req){
 
 module.exports = {
     sign,
+    check,
 };
