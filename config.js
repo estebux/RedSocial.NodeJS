@@ -18,4 +18,5 @@ module.exports = {
     post:{
         port: process.env.POST_PORT || 3002,
     },
+    remoteDB: process.env.REMOTE_DB || false
 }
