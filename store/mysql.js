@@ -77,15 +77,6 @@ function update(table, data){
     });
 }
 
-function query(table, query){
-    return new Promise((resolve, reject) => {
-        connection.query(`SELECT * FROM ${table} WHERE ?`, query, (err, res) => {
-            if(err) return reject(err);
-            resolve(res[0] || null);
-        });
-    });
-}
-
 function upsert(table, data){;
     if(!data && !data.id){
         return update(table, data);
@@ -95,7 +86,21 @@ function upsert(table, data){;
     
 }
 
+function query(table, query, join) {
+    let joinQuery = '';
+    if (join) {
+        const key = Object.keys(join)[0];
+        const val = join[key];
+        joinQuery = `JOIN ${key} ON ${table}.${val} = ${key}.id`;
+    }
 
+    return new Promise((resolve, reject) => {
+        connection.query(`SELECT * FROM ${table} ${joinQuery} WHERE ${table}.?`, query, (err, res) => {
+            if (err) return reject(err);
+            resolve(res[0] || null);
+        })
+    })
+}
 
 module.exports = {
     list, 

@@ -12,9 +12,8 @@ const app = express();
 app.use(bodyParser.json());
 
 const swaggerDoc = require('./swagger.json');
-const { error } = require('../network/response.js');
 
-// ROUER
+// router
 app.use('/api/user', user);
 app.use('/api/auth', auth);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));

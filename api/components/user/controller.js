@@ -2,19 +2,21 @@ const tabla = 'user';
 const nanoid = require('nanoid');
 const auth = require('../auth');
 
+
 module.exports = function(injectedStore){
     let store = injectedStore;
     if(!store){
-        store = require('../../../store/dummy');
+        store = require('../../../store/mysql');
+    }
+
+    
+    function list(){
+        return store.list(tabla);
     }
 
     async function login(username, password){
         const data = await store.query(tabla, {usrename: username});
         return data;
-    }
-
-    function list(){
-        return store.list(tabla);
     }
 
     function get(id){
@@ -43,11 +45,27 @@ module.exports = function(injectedStore){
         return store.upsert(tabla, user);
     }
 
+    function follow(from, to){
+        return store.upsert(tabla + '_follow',{
+            user_from: from,
+            user_to: to,
+        });
+    }
+
+    async function following(user){
+        const join = {}
+        join[tabla] = 'user_to';
+        const query = {user_from: user}
+
+        return await store.query(tabla + '_follow', query, join);
+    }
+
     return  {
         list,
         get,
         upsert,
-        login,
+        follow,
+        following,
     }
 }
 
