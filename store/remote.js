@@ -1,6 +1,6 @@
 const request = require('request');
 
-function createRemoveDB(host, port){
+function createRemoteDB(host, port){
     const URL = 'http://' + host + ':' + port;
 
     function list(table){
@@ -41,4 +41,4 @@ function createRemoveDB(host, port){
     }
 }
 
-module.exports = createRemoveDB;
+module.exports = createRemoteDB;
