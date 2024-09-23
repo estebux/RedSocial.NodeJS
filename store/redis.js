@@ -8,39 +8,39 @@ const client = redis.createClient({
         host: config.redis.host,
         port: config.redis.port
     }
+
 });
 
-async function list(table){
+function list(table) {
     return new Promise((resolve, reject) => {
-        client.get(table, (err, data => {
-            if(err) return reject(err);
+        client.get(table, (err, data) => {
+            if (err) return reject(err);
 
             let res = data || null;
-            if(data){
+            if (data) {
                 res = JSON.stringify(data);
             }
             resolve(res);
-        }));
-    })
+        });
+    });
 }
 
-function get(table, id){
-    
+function get(table, id) {
+    //
 }
 
-async function upsert(table, data){
+async function upsert(table, data) {
     let key = table;
-    if(data && data.id){
-        key = data + '_' + data.id;
+    if (data && data.id) {
+        key = key + '_' + data.id;
     }
 
-    client.setEx(key, 10, JSON.stringify(data));
-
+    client.setex(key, 10, JSON.stringify(data));
     return true;
 }
 
 module.exports = {
     list,
     get,
-    upsert
-}
+    upsert,
+};
